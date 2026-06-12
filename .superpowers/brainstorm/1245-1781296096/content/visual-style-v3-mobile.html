@@ -1,0 +1,469 @@
+<style>
+  .screens { display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
+
+  .phone {
+    width: 360px;
+    height: 740px;
+    background: #050810;
+    border-radius: 40px;
+    border: 8px solid #1a1d24;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.7), inset 0 0 0 1px rgba(255,255,255,0.04);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .phone::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 15% 8%, rgba(124, 92, 255, 0.25), transparent 45%),
+      radial-gradient(circle at 90% 90%, rgba(255, 138, 76, 0.18), transparent 45%),
+      linear-gradient(180deg, #0a0e1a 0%, #0f1320 100%);
+    z-index: 0;
+  }
+  .phone::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 22px 22px;
+    z-index: 0;
+    opacity: 0.6;
+  }
+  .phone > * { position: relative; z-index: 1; }
+
+  .notch {
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 120px; height: 22px;
+    background: #1a1d24;
+    border-radius: 0 0 16px 16px;
+    z-index: 2;
+  }
+
+  /* ============ DAILY QUESTION SCREEN ============ */
+
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 36px 18px 12px;
+  }
+  .group-chip {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 6px 12px 6px 6px; border-radius: 100px;
+  }
+  .group-avatars { display: flex; }
+  .group-avatars div {
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 2px solid #0a0e1a; margin-left: -6px;
+  }
+  .group-avatars div:first-child { margin-left: 0; background: linear-gradient(135deg, #ff8a4c, #ff3d8b); }
+  .group-avatars div:nth-child(2) { background: linear-gradient(135deg, #7c5cff, #b794ff); }
+  .group-avatars div:nth-child(3) { background: linear-gradient(135deg, #4ade80, #22d3a4); }
+  .group-name { color: #e8edf2; font-size: 12px; font-weight: 600; }
+
+  .streak {
+    display: flex; align-items: center; gap: 4px;
+    background: linear-gradient(135deg, #ff6b35, #ff3d8b);
+    padding: 6px 10px; border-radius: 100px;
+    color: #fff; font-weight: 700; font-size: 12px;
+    box-shadow: 0 4px 14px rgba(255,61,139,0.35);
+  }
+
+  .day-progress {
+    display: flex; gap: 8px; padding: 6px 22px 12px;
+    align-items: center;
+  }
+  .dot { height: 4px; flex: 1; border-radius: 4px; background: rgba(255,255,255,0.1); }
+  .dot.done { background: linear-gradient(90deg, #4ade80, #22d3a4); }
+  .dot.active { background: linear-gradient(90deg, #7c5cff, #b794ff); box-shadow: 0 0 12px rgba(124,92,255,0.5); }
+  .q-counter { color: #94a3b8; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
+
+  /* Mascot now ABOVE category, floating */
+  .mascot-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 8px 22px 4px;
+  }
+  .owl-bubble {
+    width: 60px; height: 60px;
+    background: linear-gradient(135deg, #7c5cff, #b794ff);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+    box-shadow: 0 8px 24px rgba(124,92,255,0.5);
+    flex-shrink: 0;
+    position: relative;
+  }
+  .owl-bubble::after {
+    content: ''; position: absolute;
+    bottom: -6px; left: 12px;
+    width: 0; height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 10px solid #7c5cff;
+    transform: rotate(-15deg);
+  }
+  .owl-msg {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 10px 14px;
+    color: #cdd6e0;
+    font-size: 12px;
+    flex: 1;
+  }
+  .owl-msg strong { color: #b794ff; }
+
+  .category-zone {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 22px 10px;
+  }
+  .cat-icon {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, #f59e0b, #ef4444);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    box-shadow: 0 6px 18px rgba(239,68,68,0.3);
+    transform: rotate(-4deg);
+  }
+  .cat-label { color: #94a3b8; font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+  .cat-name { color: #fff; font-size: 15px; font-weight: 700; }
+
+  .q-card {
+    margin: 4px 18px 16px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 18px;
+    padding: 20px 20px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+  .q-text { color: #fff; font-size: 17px; font-weight: 600; line-height: 1.35; }
+
+  .answers { padding: 0 18px; display: flex; flex-direction: column; gap: 9px; }
+  .ans-row {
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 13px;
+    padding: 12px 14px;
+    color: #e8edf2; font-size: 13px; font-weight: 500;
+  }
+  .ans-letter {
+    width: 26px; height: 26px; flex-shrink: 0;
+    background: rgba(255,255,255,0.08);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: #94a3b8;
+  }
+  .ans-row.hover {
+    background: rgba(124,92,255,0.12);
+    border-color: rgba(124,92,255,0.45);
+  }
+  .ans-row.hover .ans-letter {
+    background: rgba(124,92,255,0.35); color: #fff;
+  }
+
+  .bottom-bar {
+    margin-top: auto;
+    padding: 14px 22px 22px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+  }
+  .powerups { display: flex; gap: 10px; }
+  .pwr {
+    width: 40px; height: 40px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 11px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    position: relative;
+  }
+  .pwr-count {
+    position: absolute; top: -4px; right: -4px;
+    background: #ef4444; color: #fff;
+    font-size: 9px; font-weight: 700;
+    width: 15px; height: 15px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid #0a0e1a;
+  }
+  .timer-ring {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: conic-gradient(#7c5cff 0deg 252deg, rgba(255,255,255,0.08) 252deg 360deg);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 20px rgba(124,92,255,0.3);
+  }
+  .timer-inner {
+    width: 42px; height: 42px;
+    background: #0a0e1a;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 700; font-size: 15px;
+  }
+
+  /* ============ RANKING SCREEN ============ */
+
+  .rank-header {
+    padding: 36px 22px 8px;
+  }
+  .rank-title {
+    color: #fff; font-size: 20px; font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .rank-sub { color: #94a3b8; font-size: 12px; }
+
+  .rank-tabs {
+    display: flex; gap: 6px; padding: 14px 22px 12px;
+  }
+  .rank-tab {
+    flex: 1; text-align: center;
+    padding: 8px 0;
+    border-radius: 100px;
+    font-size: 11px; font-weight: 700;
+    color: #94a3b8;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .rank-tab.active {
+    background: linear-gradient(135deg, #7c5cff, #b794ff);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 6px 20px rgba(124,92,255,0.4);
+  }
+
+  /* Podium */
+  .podium {
+    display: flex; justify-content: center; align-items: flex-end;
+    gap: 12px; padding: 22px 22px 24px;
+  }
+  .pod-spot {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+  }
+  .pod-avatar {
+    width: 56px; height: 56px; border-radius: 50%;
+    border: 3px solid;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; font-weight: 700; color: #fff;
+    position: relative;
+  }
+  .pod-name { color: #e8edf2; font-size: 12px; font-weight: 600; }
+  .pod-score { color: #94a3b8; font-size: 10px; font-weight: 600; }
+  .pod-bar {
+    width: 70px; border-radius: 12px 12px 0 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+    border: 1px solid rgba(255,255,255,0.08);
+    border-bottom: none;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 700;
+    color: rgba(255,255,255,0.4);
+    padding-top: 8px;
+  }
+  .pod-1 .pod-avatar { border-color: #ffd54a; box-shadow: 0 0 20px rgba(255,213,74,0.5); background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+  .pod-1 .pod-bar { height: 90px; color: #ffd54a; }
+  .pod-1 .pod-avatar::after { content: '👑'; position: absolute; top: -22px; font-size: 22px; }
+
+  .pod-2 .pod-avatar { border-color: #cbd5e1; background: linear-gradient(135deg, #94a3b8, #cbd5e1); }
+  .pod-2 .pod-bar { height: 64px; }
+
+  .pod-3 .pod-avatar { border-color: #d97706; background: linear-gradient(135deg, #92400e, #d97706); }
+  .pod-3 .pod-bar { height: 48px; }
+
+  /* List */
+  .rank-list { padding: 4px 18px; display: flex; flex-direction: column; gap: 8px; }
+  .rank-row {
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 13px;
+    padding: 10px 14px;
+  }
+  .rank-row.me {
+    background: rgba(124,92,255,0.1);
+    border-color: rgba(124,92,255,0.4);
+  }
+  .rank-pos { color: #94a3b8; font-size: 13px; font-weight: 700; width: 22px; }
+  .rank-row.me .rank-pos { color: #b794ff; }
+  .rank-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: #fff;
+  }
+  .rank-name { flex: 1; color: #e8edf2; font-size: 13px; font-weight: 600; }
+  .rank-row.me .rank-name { color: #fff; }
+  .rank-streak {
+    display: flex; align-items: center; gap: 3px;
+    color: #ff8a4c; font-size: 10px; font-weight: 700;
+    margin-right: 8px;
+  }
+  .rank-pts {
+    color: #fff; font-size: 13px; font-weight: 700;
+  }
+
+  /* Side notes */
+  .notes {
+    width: 280px;
+    color: #cdd6e0; font-size: 13px; line-height: 1.6;
+  }
+  .notes h3 { color: #fff; margin: 0 0 8px; font-size: 16px; }
+  .notes .tag {
+    display: inline-block;
+    background: rgba(124,92,255,0.15);
+    color: #b794ff;
+    padding: 4px 10px; border-radius: 100px;
+    font-size: 10px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .notes ul { padding-left: 18px; margin: 8px 0; }
+  .notes li { margin: 8px 0; }
+  .notes strong { color: #fff; }
+</style>
+
+<h2>V3 · Mobile-first, mascota recognizable + pantalla de ranking</h2>
+<p class="subtitle">Las dos pantallas centrales de la app. Tamaño real de viewport móvil (360px).</p>
+
+<div class="screens">
+
+  <!-- DAILY QUESTION -->
+  <div class="phone">
+    <div class="notch"></div>
+
+    <div class="topbar">
+      <div class="group-chip">
+        <div class="group-avatars">
+          <div></div><div></div><div></div>
+        </div>
+        <span class="group-name">Los Amigos</span>
+      </div>
+      <div class="streak">🔥 12</div>
+    </div>
+
+    <div class="day-progress">
+      <div class="dot done"></div>
+      <div class="dot active"></div>
+      <div class="dot"></div>
+      <span class="q-counter">2/3</span>
+    </div>
+
+    <div class="mascot-row">
+      <div class="owl-bubble">🦉</div>
+      <div class="owl-msg">"Esta era fácil… <strong>o no?</strong>"</div>
+    </div>
+
+    <div class="category-zone">
+      <div class="cat-icon">🏛️</div>
+      <div>
+        <div class="cat-label">Categoría</div>
+        <div class="cat-name">Historia</div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-text">¿En qué año cayó el muro de Berlín?</div>
+    </div>
+
+    <div class="answers">
+      <div class="ans-row"><div class="ans-letter">A</div>1987</div>
+      <div class="ans-row hover"><div class="ans-letter">B</div>1989</div>
+      <div class="ans-row"><div class="ans-letter">C</div>1991</div>
+      <div class="ans-row"><div class="ans-letter">D</div>1985</div>
+    </div>
+
+    <div class="bottom-bar">
+      <div class="powerups">
+        <div class="pwr">✂️<div class="pwr-count">2</div></div>
+        <div class="pwr">💡<div class="pwr-count">1</div></div>
+        <div class="pwr">⏱️<div class="pwr-count">3</div></div>
+      </div>
+      <div class="timer-ring">
+        <div class="timer-inner">14</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RANKING SCREEN -->
+  <div class="phone">
+    <div class="notch"></div>
+
+    <div class="rank-header">
+      <div class="rank-title">Los Amigos</div>
+      <div class="rank-sub">Temporada 1 · Día 12 de 28</div>
+    </div>
+
+    <div class="rank-tabs">
+      <div class="rank-tab">Hoy</div>
+      <div class="rank-tab active">Semana</div>
+      <div class="rank-tab">Temporada</div>
+    </div>
+
+    <div class="podium">
+      <div class="pod-spot pod-2">
+        <div class="pod-avatar">M</div>
+        <div class="pod-name">Martín</div>
+        <div class="pod-score">142 pts</div>
+        <div class="pod-bar">2</div>
+      </div>
+      <div class="pod-spot pod-1">
+        <div class="pod-avatar">S</div>
+        <div class="pod-name">Sofía</div>
+        <div class="pod-score">168 pts</div>
+        <div class="pod-bar">1</div>
+      </div>
+      <div class="pod-spot pod-3">
+        <div class="pod-avatar">D</div>
+        <div class="pod-name">Diego</div>
+        <div class="pod-score">128 pts</div>
+        <div class="pod-bar">3</div>
+      </div>
+    </div>
+
+    <div class="rank-list">
+      <div class="rank-row me">
+        <div class="rank-pos">4</div>
+        <div class="rank-avatar" style="background:linear-gradient(135deg,#7c5cff,#b794ff)">F</div>
+        <div class="rank-name">Tú (Francisco)</div>
+        <div class="rank-streak">🔥12</div>
+        <div class="rank-pts">119</div>
+      </div>
+      <div class="rank-row">
+        <div class="rank-pos">5</div>
+        <div class="rank-avatar" style="background:linear-gradient(135deg,#22d3a4,#4ade80)">A</div>
+        <div class="rank-name">Ana</div>
+        <div class="rank-streak">🔥8</div>
+        <div class="rank-pts">98</div>
+      </div>
+      <div class="rank-row">
+        <div class="rank-pos">6</div>
+        <div class="rank-avatar" style="background:linear-gradient(135deg,#ff8a4c,#ff3d8b)">L</div>
+        <div class="rank-name">Lucas</div>
+        <div class="rank-streak">🔥3</div>
+        <div class="rank-pts">76</div>
+      </div>
+      <div class="rank-row">
+        <div class="rank-pos">7</div>
+        <div class="rank-avatar" style="background:linear-gradient(135deg,#94a3b8,#cbd5e1)">P</div>
+        <div class="rank-name">Pablo</div>
+        <div class="rank-streak">🔥0</div>
+        <div class="rank-pts">54</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notes">
+    <span class="tag">V3 · Cambios</span>
+    <h3>Mobile-first + mascota fuera del path</h3>
+    <ul>
+      <li><strong>360px viewport</strong> — el tamaño real de un celular promedio. Todo se ve cómodo, nada se aprieta.</li>
+      <li><strong>Mascota arriba, con burbuja de diálogo</strong>. Ya no se superpone al texto. Y le da personalidad: el búho "comenta" sobre la pregunta antes/después. Mensajes random aleatorios.</li>
+      <li><strong>Búho recognizable</strong>: emoji 🦉 grande como placeholder. En producción reemplazás por ilustración custom con 5-6 expresiones (neutral, sorprendido, alegre, triste, victorioso, dudoso).</li>
+      <li><strong>Pantalla de ranking</strong>: tabs (Hoy / Semana / Temporada) + podio con corona dorada al #1 + lista. Tu fila resaltada en violeta. Streak fire al lado de cada jugador.</li>
+      <li><strong>App web (PWA)</strong>: instalable en home screen, full screen sin barra del navegador, push notifications nativas para el "ya está disponible el desafío de hoy".</li>
+    </ul>
+  </div>
+
+</div>
