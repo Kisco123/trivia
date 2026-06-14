@@ -8,6 +8,8 @@ import { useCountdown } from "@/hooks/useCountdown";
 import { submitAnswer, requestFiftyFifty } from "@/lib/gameplay";
 import { computeScore, TIME_LIMIT_MS } from "@/lib/scoring";
 import { markPlayed, hasPlayed, getScore } from "@/lib/playedToday";
+import { ensureSession, getCurrentUserId } from "@/lib/auth";
+import { savePlay, getMyPlay } from "@/lib/plays";
 import type { DailyQuestion } from "@/lib/dailySet";
 import type { Difficulty } from "@/lib/questions";
 
@@ -33,9 +35,32 @@ export function GameClient({ date, questions, questionIds, client, revealMs = 12
   const [startedAt, setStartedAt] = useState(() => Date.now());
   const [done, setDone] = useState(false);
   const [alreadyTotal, setAlreadyTotal] = useState<number | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (hasPlayed(date)) setAlreadyTotal(getScore(date) ?? 0);
+    let cancelled = false;
+    (async () => {
+      try {
+        await ensureSession(client);
+        const uid = await getCurrentUserId(client);
+        if (cancelled) return;
+        setUserId(uid);
+        if (uid) {
+          const play = await getMyPlay(uid, date, client);
+          if (!cancelled && play) {
+            setAlreadyTotal(play.score);
+            return;
+          }
+        }
+      } catch {
+        // auth no disponible: caemos al gating local
+      }
+      if (!cancelled && hasPlayed(date)) setAlreadyTotal(getScore(date) ?? 0);
+    })();
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date]);
 
   const q = questions[idx];
@@ -56,7 +81,9 @@ export function GameClient({ date, questions, questionIds, client, revealMs = 12
     setTimeout(() => {
       if (idx + 1 >= questions.length) {
         const total = next.reduce((s, o) => s + o.points, 0);
+        const aciertos = next.filter((o) => o.correct).length;
         markPlayed(date, total);
+        if (userId) void savePlay(userId, date, total, aciertos, client).catch(() => {});
         setDone(true);
       } else {
         setIdx(idx + 1);
