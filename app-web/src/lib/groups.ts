@@ -32,5 +32,5 @@ export async function joinGroup(
 export async function getMyGroups(client: SupabaseClient = getSupabaseClient()): Promise<Group[]> {
   const { data, error } = await client.from("group_members").select("groups(*)");
   if (error) throw new Error(`error listando grupos: ${error.message}`);
-  return (data ?? []).map((r: { groups: Group }) => r.groups);
+  return (data ?? []).map((r: unknown) => (r as { groups: Group }).groups);
 }
