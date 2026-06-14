@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { ensureSession, getDisplayName } from "@/lib/auth";
 import { getMyGroups, createGroup, joinGroup } from "@/lib/groups";
 import type { Group } from "@/lib/groups";
@@ -98,20 +99,26 @@ export function GroupsLobby() {
       ) : (
         <div className="flex flex-col gap-3">
           {groups.map((g) => (
-            <Card key={g.id} className="flex items-center justify-between gap-3">
-              <span className="font-bold">{g.name}</span>
-              <div className="flex items-center gap-2">
-                <span className="rounded-lg border border-white/10 bg-white/[0.06] px-2 py-1 font-mono text-xs tracking-widest text-white/80">
-                  {g.invite_code}
-                </span>
-                <button
-                  onClick={() => handleCopy(g.invite_code)}
-                  className="rounded-xl border border-white/10 bg-white/[0.04] px-2 py-1 text-xs text-white/60 transition hover:text-white active:scale-95"
-                >
-                  {copiedCode === g.invite_code ? "¡Copiado!" : "Copiar"}
-                </button>
-              </div>
-            </Card>
+            <Link key={g.id} href={`/grupos/${g.id}`} className="block">
+              <Card className="flex items-center justify-between gap-3">
+                <span className="font-bold">{g.name}</span>
+                <div className="flex items-center gap-2">
+                  <span className="rounded-lg border border-white/10 bg-white/[0.06] px-2 py-1 font-mono text-xs tracking-widest text-white/80">
+                    {g.invite_code}
+                  </span>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleCopy(g.invite_code);
+                    }}
+                    className="rounded-xl border border-white/10 bg-white/[0.04] px-2 py-1 text-xs text-white/60 transition hover:text-white active:scale-95"
+                  >
+                    {copiedCode === g.invite_code ? "¡Copiado!" : "Copiar"}
+                  </button>
+                </div>
+              </Card>
+            </Link>
           ))}
         </div>
       )}
