@@ -2,6 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { getSupabaseClient } from "@/lib/supabase";
 
 export type DailyQuestion = {
+  id: string;
   date: string;
   slot: "facil" | "media" | "dificil";
   category: string;
@@ -18,7 +19,7 @@ export async function getDailySet(
 ): Promise<DailyQuestion[]> {
   const { data, error } = await client
     .from("v_daily_questions")
-    .select("date, slot, category, difficulty, prompt, options")
+    .select("id, date, slot, category, difficulty, prompt, options")
     .eq("date", date);
 
   if (error) throw new Error(`error leyendo set diario: ${error.message}`);
