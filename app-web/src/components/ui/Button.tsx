@@ -15,7 +15,7 @@ export function Button({
 }: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant }) {
   return (
     <button
-      className={`rounded-2xl px-6 py-3 font-semibold transition active:scale-95 ${VARIANTS[variant]} ${className}`}
+      className={`cursor-pointer rounded-2xl px-6 py-3 font-semibold transition hover:brightness-110 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 ${VARIANTS[variant]} ${className}`}
       {...props}
     />
   );

@@ -1,6 +1,6 @@
 import { Mascot } from "@/components/Mascot";
 import { Card } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
+import { PlayCTA } from "@/components/PlayCTA";
 import { CATEGORIES } from "@/lib/categories";
 
 export default function Home() {
@@ -32,7 +32,7 @@ export default function Home() {
         </div>
       </Card>
 
-      <Button className="w-full">Jugar el desafío de hoy</Button>
+      <PlayCTA />
     </main>
   );
 }
