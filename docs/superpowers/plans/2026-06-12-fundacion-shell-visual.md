@@ -248,36 +248,33 @@ export type ColorToken = keyof typeof colors;
 Run: `pnpm test src/styles`
 Expected: PASS.
 
-- [ ] **Step 5: Cablear tokens en Tailwind**
+- [ ] **Step 5: Cablear tokens en Tailwind (v4, config por CSS)**
 
-Reemplazar el contenido de `tailwind.config.ts` por:
-```ts
-import type { Config } from "tailwindcss";
-import { colors } from "./src/styles/tokens";
+> El proyecto usa **Tailwind v4**, que NO usa `tailwind.config.ts`. El tema se
+> define en CSS con `@theme`. `tokens.ts` sigue siendo la fuente para colores
+> usados desde JS (inline styles, colores de categoría); el bloque `@theme`
+> debe mantener los mismos valores para las clases utilitarias.
 
-const config: Config = {
-  content: ["./src/**/*.{ts,tsx}"],
-  theme: {
-    extend: {
-      colors: {
-        bg: colors.bg,
-        "bg-elevated": colors.bgElevated,
-        violet: { DEFAULT: colors.violet, light: colors.violetLight },
-        orange: colors.orange,
-        magenta: colors.magenta,
-        success: { DEFAULT: colors.success, deep: colors.successDeep },
-        danger: colors.danger,
-      },
-      fontFamily: {
-        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
-      },
-    },
-  },
-  plugins: [],
-};
+En `src/app/globals.css`, dejar el archivo así (manteniendo el import de Tailwind
+que ya generó el scaffold arriba de todo):
+```css
+@import "tailwindcss";
 
-export default config;
+@theme {
+  --color-bg: #0a0e1a;
+  --color-bg-elevated: #0f1320;
+  --color-violet: #7c5cff;
+  --color-violet-light: #b794ff;
+  --color-orange: #ff8a4c;
+  --color-magenta: #ff3d8b;
+  --color-success: #4ade80;
+  --color-success-deep: #22d3a4;
+  --color-danger: #ef4444;
+}
 ```
+Esto habilita utilidades como `bg-bg`, `text-violet`, `from-violet`,
+`to-violet-light`, `bg-success`, etc. (El fondo con gradientes del body se añade
+en la Task 4.)
 
 - [ ] **Step 6: Verificar que el build sigue compilando**
 
