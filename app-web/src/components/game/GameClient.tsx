@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { QuestionView } from "@/components/game/QuestionView";
 import { ResultView } from "@/components/game/ResultView";
+import { IntroView } from "@/components/game/IntroView";
 import { useCountdown } from "@/hooks/useCountdown";
 import { submitAnswer, requestFiftyFifty } from "@/lib/gameplay";
 import { computeScore, TIME_LIMIT_MS } from "@/lib/scoring";
@@ -19,11 +20,13 @@ type Props = {
 };
 
 type Outcome = { prompt: string; correct: boolean; points: number };
+type Phase = "intro" | "playing";
 
 export function GameClient({ date, questions, questionIds, client, revealMs = 1200 }: Props) {
+  const [phase, setPhase] = useState<Phase>("intro");
   const [idx, setIdx] = useState(0);
   const [hidden, setHidden] = useState<number[]>([]);
-  const [extra, setExtra] = useState(0);
+  const [extraUsed, setExtraUsed] = useState(false);
   const [answeredIndex, setAnsweredIndex] = useState<number | null>(null);
   const [correctIndex, setCorrectIndex] = useState<number | null>(null);
   const [outcomes, setOutcomes] = useState<Outcome[]>([]);
@@ -36,9 +39,11 @@ export function GameClient({ date, questions, questionIds, client, revealMs = 12
   }, [date]);
 
   const q = questions[idx];
-  const { secondsLeft } = useCountdown(20 + extra, answeredIndex === null && !done && alreadyTotal === null);
+  const running =
+    phase === "playing" && answeredIndex === null && !done && alreadyTotal === null;
+  const { secondsLeft, addSeconds } = useCountdown(20, running, idx);
 
-  async function handleAnswer(choice: number) {
+  async function resolveAnswer(choice: number) {
     if (answeredIndex !== null) return;
     setAnsweredIndex(choice);
     const elapsed = Date.now() - startedAt;
@@ -56,12 +61,24 @@ export function GameClient({ date, questions, questionIds, client, revealMs = 12
       } else {
         setIdx(idx + 1);
         setHidden([]);
-        setExtra(0);
+        setExtraUsed(false);
         setAnsweredIndex(null);
         setCorrectIndex(null);
         setStartedAt(Date.now());
       }
     }, revealMs);
+  }
+
+  // Tiempo agotado: cuenta como fallo (sin opción elegida) y avanza.
+  useEffect(() => {
+    if (running && secondsLeft === 0) {
+      void resolveAnswer(-1);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [secondsLeft, running]);
+
+  function handleAnswer(choice: number) {
+    void resolveAnswer(choice);
   }
 
   async function handleFiftyFifty() {
@@ -70,8 +87,14 @@ export function GameClient({ date, questions, questionIds, client, revealMs = 12
   }
 
   function handleExtraTime() {
-    if (answeredIndex !== null || extra > 0) return;
-    setExtra(10);
+    if (answeredIndex !== null || extraUsed) return;
+    setExtraUsed(true);
+    addSeconds(10);
+  }
+
+  function startGame() {
+    setStartedAt(Date.now());
+    setPhase("playing");
   }
 
   if (alreadyTotal !== null) {
@@ -81,6 +104,10 @@ export function GameClient({ date, questions, questionIds, client, revealMs = 12
   if (done) {
     const total = outcomes.reduce((s, o) => s + o.points, 0);
     return <ResultView total={total} breakdown={outcomes} />;
+  }
+
+  if (phase === "intro") {
+    return <IntroView questions={questions} onStart={startGame} />;
   }
 
   return (

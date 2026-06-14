@@ -61,7 +61,7 @@ export function QuestionView({
               key={i}
               disabled={locked}
               onClick={() => onAnswer(i)}
-              className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-left text-sm font-medium transition disabled:cursor-default ${optionClass(i)}`}
+              className={`flex cursor-pointer items-center gap-3 rounded-2xl border px-4 py-3 text-left text-sm font-medium transition hover:brightness-110 disabled:cursor-default disabled:hover:brightness-100 ${optionClass(i)}`}
             >
               <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-white/10 text-xs font-bold">
                 {LETTERS[i]}
@@ -73,10 +73,10 @@ export function QuestionView({
       </div>
 
       <div className="mt-auto flex justify-center gap-3 pt-4">
-        <button onClick={onFiftyFifty} disabled={locked}
-          className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-lg disabled:opacity-40">✂️</button>
-        <button onClick={onExtraTime} disabled={locked}
-          className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-lg disabled:opacity-40">⏱️</button>
+        <button onClick={onFiftyFifty} disabled={locked} title="50/50: elimina 2 incorrectas"
+          className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl border border-white/10 bg-white/5 text-lg transition hover:brightness-125 disabled:cursor-default disabled:opacity-40">✂️</button>
+        <button onClick={onExtraTime} disabled={locked} title="Tiempo extra: +10 s"
+          className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl border border-white/10 bg-white/5 text-lg transition hover:brightness-125 disabled:cursor-default disabled:opacity-40">⏱️</button>
       </div>
     </div>
   );

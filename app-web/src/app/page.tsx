@@ -33,6 +33,19 @@ export default function Home() {
       </Card>
 
       <PlayCTA />
+
+      <div className="grid w-full grid-cols-2 gap-3">
+        <div className="flex flex-col items-center gap-1 rounded-2xl border border-white/10 bg-white/[0.03] py-4 opacity-60">
+          <span className="text-2xl">🏆</span>
+          <span className="text-sm font-semibold">Ranking</span>
+          <span className="text-[10px] uppercase tracking-wide text-white/40">Pronto</span>
+        </div>
+        <div className="flex flex-col items-center gap-1 rounded-2xl border border-white/10 bg-white/[0.03] py-4 opacity-60">
+          <span className="text-2xl">💬</span>
+          <span className="text-sm font-semibold">Chat</span>
+          <span className="text-[10px] uppercase tracking-wide text-white/40">Pronto</span>
+        </div>
+      </div>
     </main>
   );
 }

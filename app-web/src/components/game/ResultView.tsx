@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { Mascot } from "@/components/Mascot";
 import { Card } from "@/components/ui/Card";
 
@@ -30,6 +31,13 @@ export function ResultView({ total, breakdown }: {
         </Card>
       )}
       <p className="text-sm text-white/50">Vuelve mañana para el próximo desafío 🦉</p>
+
+      <Link
+        href="/"
+        className="w-full cursor-pointer rounded-2xl bg-gradient-to-br from-violet to-violet-light px-6 py-3 text-center font-semibold text-white shadow-[0_6px_20px_rgba(124,92,255,0.4)] transition hover:brightness-110 active:scale-95"
+      >
+        Volver al inicio
+      </Link>
     </div>
   );
 }

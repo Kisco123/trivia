@@ -15,6 +15,8 @@ describe("GameClient", () => {
 
   it("avanza por las 3 preguntas y muestra el resultado", async () => {
     render(<GameClient date="2026-06-14" questions={set as never} questionIds={["q1","q2","q3"]} client={okClient} revealMs={0} />);
+    // Pantalla previa: comenzar el desafío
+    fireEvent.click(screen.getByRole("button", { name: /Comenzar/ }));
     expect(screen.getByText("P1")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: /^A/ }));
     await waitFor(() => screen.getByText("P2"));
