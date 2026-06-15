@@ -52,6 +52,18 @@ export default function Home() {
         <span className="ml-auto text-lg text-white/30">›</span>
       </Link>
 
+      <Link
+        href="/perfil"
+        className="flex w-full items-center gap-3 rounded-2xl border border-white/15 bg-white/[0.06] px-5 py-4 text-left transition hover:bg-white/[0.10] active:scale-95"
+      >
+        <span className="text-2xl">📊</span>
+        <span className="flex flex-col">
+          <span className="text-sm font-semibold">Mi perfil</span>
+          <span className="text-[11px] text-white/50">Tus estadísticas y rachas</span>
+        </span>
+        <span className="ml-auto text-lg text-white/30">›</span>
+      </Link>
+
       <div className="w-full rounded-2xl border border-orange/20 bg-gradient-to-br from-orange/[0.10] to-magenta/[0.06] p-4 text-left">
         <div className="mb-1 flex items-center gap-2 text-[11px] font-bold uppercase tracking-wide text-orange">
           💡 Dato curioso del día
