@@ -8,6 +8,7 @@ import type { Group } from "@/lib/groups";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Mascot } from "@/components/Mascot";
+import { Loading } from "@/components/ui/Loading";
 
 export function GroupsLobby() {
   const [groups, setGroups] = useState<Group[]>([]);
@@ -26,6 +27,9 @@ export function GroupsLobby() {
 
   // Copied code feedback
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
+
+  // Invite link copied feedback
+  const [copiedLink, setCopiedLink] = useState<string | null>(null);
 
   async function loadGroups() {
     await ensureSession();
@@ -77,12 +81,26 @@ export function GroupsLobby() {
     });
   }
 
+  function handleInvite(e: React.MouseEvent, inviteCode: string) {
+    e.preventDefault();
+    e.stopPropagation();
+    const url = `${window.location.origin}/unirse/${inviteCode}`;
+    if (navigator.share) {
+      navigator.share({
+        title: "Únete a mi grupo en Trivia",
+        text: "Te invito a jugar la trivia diaria conmigo:",
+        url,
+      }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(url).then(() => {
+        setCopiedLink(inviteCode);
+        setTimeout(() => setCopiedLink(null), 1500);
+      });
+    }
+  }
+
   if (loading) {
-    return (
-      <div className="flex flex-1 items-center justify-center text-white/60">
-        Cargando…
-      </div>
-    );
+    return <Loading />;
   }
 
   return (
@@ -115,6 +133,12 @@ export function GroupsLobby() {
                     className="rounded-xl border border-white/10 bg-white/[0.04] px-2 py-1 text-xs text-white/60 transition hover:text-white active:scale-95"
                   >
                     {copiedCode === g.invite_code ? "¡Copiado!" : "Copiar"}
+                  </button>
+                  <button
+                    onClick={(e) => handleInvite(e, g.invite_code)}
+                    className="rounded-xl border border-white/10 bg-white/[0.04] px-2 py-1 text-xs text-white/60 transition hover:text-white active:scale-95"
+                  >
+                    {copiedLink === g.invite_code ? "¡Link copiado!" : "🔗 Invitar"}
                   </button>
                 </div>
               </Card>
