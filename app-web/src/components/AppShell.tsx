@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { AppHeader } from "@/components/AppHeader";
+import { InstallPrompt } from "@/components/InstallPrompt";
 
 /** Contenedor mobile-first: centra el contenido en una columna de ancho de celular.
  *  Incluye un header con el ícono de la app que vuelve al inicio (oculto en la home). */
@@ -10,6 +11,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <AppHeader />
         {children}
       </div>
+      <InstallPrompt />
     </div>
   );
 }
