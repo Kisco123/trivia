@@ -30,7 +30,17 @@ export async function joinGroup(
 }
 
 export async function getMyGroups(client: SupabaseClient = getSupabaseClient()): Promise<Group[]> {
-  const { data, error } = await client.from("group_members").select("groups(*)");
+  // Filtramos por el usuario actual: la política RLS deja leer también las
+  // membresías de los co-miembros, así que sin este filtro el grupo aparecería
+  // una vez por cada miembro.
+  const { data: userData } = await client.auth.getUser();
+  const uid = userData.user?.id;
+  if (!uid) return [];
+
+  const { data, error } = await client
+    .from("group_members")
+    .select("groups(*)")
+    .eq("user_id", uid);
   if (error) throw new Error(`error listando grupos: ${error.message}`);
   return (data ?? []).map((r: unknown) => (r as { groups: Group }).groups);
 }
