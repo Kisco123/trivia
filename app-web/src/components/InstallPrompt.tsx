@@ -19,6 +19,23 @@ function detectPlatform(): "ios" | "android" | "other" {
   return "other";
 }
 
+const STEPS: Record<"ios" | "android" | "other", string[]> = {
+  ios: [
+    "Toca el botón Compartir (el cuadrito con la flecha ↑, abajo en Safari).",
+    "Baja y elige “Agregar a pantalla de inicio”.",
+    "Toca “Agregar”. ¡Listo!",
+  ],
+  android: [
+    "Toca el menú ⋮ (arriba a la derecha, en Chrome).",
+    "Elige “Instalar app” o “Agregar a pantalla de inicio”.",
+    "Confirma. ¡Listo!",
+  ],
+  other: [
+    "Abre esta misma dirección en tu celular (Safari en iPhone, Chrome en Android).",
+    "Agrégala a tu pantalla de inicio desde el menú del navegador.",
+  ],
+};
+
 export function InstallPrompt() {
   const [show, setShow] = useState(false);
   const [platform, setPlatform] = useState<"ios" | "android" | "other">("other");
@@ -37,40 +54,34 @@ export function InstallPrompt() {
 
   if (!show) return null;
 
-  const instructions =
-    platform === "ios" ? (
-      <>
-        Toca <b>Compartir</b> (el cuadrito con la flecha ↑) y luego{" "}
-        <b>&ldquo;Agregar a pantalla de inicio&rdquo;</b>.
-      </>
-    ) : platform === "android" ? (
-      <>
-        Toca el menú <b>⋮</b> (arriba a la derecha) y luego{" "}
-        <b>&ldquo;Instalar app&rdquo;</b> o <b>&ldquo;Agregar a pantalla de inicio&rdquo;</b>.
-      </>
-    ) : (
-      <>Ábrela en tu <b>celular</b> y agrégala a la pantalla de inicio para usarla como app.</>
-    );
-
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 px-6">
       <div className="w-full max-w-[360px] rounded-3xl border border-white/10 bg-bg-elevated p-6 text-center shadow-2xl">
         <div className="flex justify-center">
           <Mascot expression="happy" size={64} />
         </div>
-        <h2 className="mt-3 text-lg font-extrabold">Tenla a mano 📲</h2>
+        <h2 className="mt-3 text-lg font-extrabold">Agrégala a tu pantalla de inicio 📲</h2>
         <p className="mt-2 text-sm text-white/70">
-          Para la mejor experiencia, agrega Trivia a tu pantalla de inicio. Se abre como una
-          app, en pantalla completa.
+          Así se juega Trivia: se abre al instante y a pantalla completa, como una app.
+          Hazlo ahora, toma 10 segundos:
         </p>
-        <div className="mt-3 rounded-2xl bg-white/5 px-4 py-3 text-sm text-white/80">
-          {instructions}
-        </div>
+
+        <ol className="mt-4 flex flex-col gap-2 text-left">
+          {STEPS[platform].map((step, i) => (
+            <li key={i} className="flex items-start gap-3 rounded-2xl bg-white/5 px-4 py-3 text-sm text-white/85">
+              <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-violet text-xs font-bold text-white">
+                {i + 1}
+              </span>
+              <span>{step}</span>
+            </li>
+          ))}
+        </ol>
+
         <button
           onClick={dismiss}
           className="mt-5 w-full cursor-pointer rounded-2xl bg-gradient-to-br from-violet to-violet-light px-6 py-3 font-semibold text-white transition hover:brightness-110 active:scale-95"
         >
-          OK, entendido
+          Listo, ya la agregué
         </button>
       </div>
     </div>
