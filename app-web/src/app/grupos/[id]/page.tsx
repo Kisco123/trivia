@@ -6,6 +6,7 @@ import Link from "next/link";
 import { getGroupRanking } from "@/lib/ranking";
 import type { RankRow, Period } from "@/lib/ranking";
 import { RankingView } from "@/components/ranking/RankingView";
+import { TrophyWall } from "@/components/ranking/TrophyWall";
 import { Loading } from "@/components/ui/Loading";
 
 export default function GrupoRankingPage() {
@@ -57,7 +58,10 @@ export default function GrupoRankingPage() {
           <p className="text-sm text-red-400">{error}</p>
         </div>
       ) : (
-        <RankingView rows={rows} period={period} onPeriodChange={setPeriod} />
+        <>
+          <RankingView rows={rows} period={period} onPeriodChange={setPeriod} />
+          <TrophyWall groupId={id} />
+        </>
       )}
     </main>
   );

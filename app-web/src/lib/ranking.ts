@@ -23,3 +23,15 @@ export async function getGroupRanking(
   if (error) throw new Error(error.message);
   return (data ?? []) as RankRow[];
 }
+
+export type TrophyRow = { week_start: string; display_name: string; score: number };
+
+/** Campeones de semanas ya cerradas del grupo (muro de trofeos). */
+export async function getTrophyWall(
+  groupId: string,
+  client: SupabaseClient = getSupabaseClient(),
+): Promise<TrophyRow[]> {
+  const { data, error } = await client.rpc("group_trophy_wall", { p_group: groupId });
+  if (error) throw new Error(error.message);
+  return (data ?? []) as TrophyRow[];
+}
