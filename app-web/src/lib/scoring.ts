@@ -1,6 +1,7 @@
 import type { Difficulty } from "@/lib/questions";
 
-export const TIME_LIMIT_MS = 20_000;
+// Tiempo por pregunta. Corto a propósito: dificulta buscar la respuesta en internet.
+export const TIME_LIMIT_MS = 12_000;
 
 const BASE: Record<Difficulty, number> = { facil: 100, media: 200, dificil: 400 };
 const MAX_BONUS: Record<Difficulty, number> = { facil: 30, media: 60, dificil: 100 };

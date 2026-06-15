@@ -66,7 +66,7 @@ export function GameClient({ date, questions, questionIds, client, revealMs = 12
   const q = questions[idx];
   const running =
     phase === "playing" && answeredIndex === null && !done && alreadyTotal === null;
-  const { secondsLeft, addSeconds } = useCountdown(20, running, idx);
+  const { secondsLeft, addSeconds } = useCountdown(TIME_LIMIT_MS / 1000, running, idx);
 
   async function resolveAnswer(choice: number) {
     if (answeredIndex !== null) return;
@@ -104,6 +104,18 @@ export function GameClient({ date, questions, questionIds, client, revealMs = 12
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [secondsLeft, running]);
 
+  // Anti-trampa: si sales de la pantalla (cambias de pestaña / minimizas) durante
+  // una pregunta activa, se bloquea como fallada. Evita irse a buscar la respuesta.
+  useEffect(() => {
+    if (!running) return;
+    function onHidden() {
+      if (document.visibilityState === "hidden") void resolveAnswer(-1);
+    }
+    document.addEventListener("visibilitychange", onHidden);
+    return () => document.removeEventListener("visibilitychange", onHidden);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [running]);
+
   function handleAnswer(choice: number) {
     void resolveAnswer(choice);
   }
@@ -116,7 +128,7 @@ export function GameClient({ date, questions, questionIds, client, revealMs = 12
   function handleExtraTime() {
     if (answeredIndex !== null || extraUsed) return;
     setExtraUsed(true);
-    addSeconds(10);
+    addSeconds(5);
   }
 
   function startGame() {

@@ -75,7 +75,7 @@ export function QuestionView({
       <div className="mt-auto flex justify-center gap-3 pt-4">
         <button onClick={onFiftyFifty} disabled={locked} title="50/50: elimina 2 incorrectas"
           className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl border border-white/10 bg-white/5 text-lg transition hover:brightness-125 disabled:cursor-default disabled:opacity-40">✂️</button>
-        <button onClick={onExtraTime} disabled={locked} title="Tiempo extra: +10 s"
+        <button onClick={onExtraTime} disabled={locked} title="Tiempo extra: +5 s"
           className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl border border-white/10 bg-white/5 text-lg transition hover:brightness-125 disabled:cursor-default disabled:opacity-40">⏱️</button>
       </div>
     </div>
