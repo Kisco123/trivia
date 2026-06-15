@@ -6,6 +6,7 @@ import Link from "next/link";
 import { getGroupRanking } from "@/lib/ranking";
 import type { RankRow, Period } from "@/lib/ranking";
 import { RankingView } from "@/components/ranking/RankingView";
+import { Loading } from "@/components/ui/Loading";
 
 export default function GrupoRankingPage() {
   const params = useParams();
@@ -49,9 +50,7 @@ export default function GrupoRankingPage() {
       </div>
 
       {loading ? (
-        <div className="flex flex-1 items-center justify-center text-white/60">
-          Cargando…
-        </div>
+        <Loading />
       ) : error ? (
         <div className="flex flex-1 items-center justify-center">
           <p className="text-sm text-red-400">{error}</p>
