@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { QuestionView } from "@/components/game/QuestionView";
 import { ResultView } from "@/components/game/ResultView";
@@ -135,13 +136,24 @@ export function GameClient({ date, questions, questionIds, client, revealMs = 12
   }
 
   return (
-    <QuestionView
-      question={q}
-      secondsLeft={secondsLeft}
-      hidden={[]}
-      answeredIndex={answeredIndex}
-      correctIndex={correctIndex}
-      onAnswer={handleAnswer}
-    />
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={idx}
+        initial={{ opacity: 0, x: 24 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -24 }}
+        transition={{ duration: 0.25 }}
+        className="flex flex-1 flex-col"
+      >
+        <QuestionView
+          question={q}
+          secondsLeft={secondsLeft}
+          hidden={[]}
+          answeredIndex={answeredIndex}
+          correctIndex={correctIndex}
+          onAnswer={handleAnswer}
+        />
+      </motion.div>
+    </AnimatePresence>
   );
 }
