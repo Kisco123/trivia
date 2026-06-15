@@ -33,13 +33,7 @@ export default function GrupoRankingPage() {
 
   return (
     <main className="flex flex-1 flex-col py-6">
-      <div className="flex items-center gap-3 mb-6">
-        <Link
-          href="/grupos"
-          className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-1.5 text-sm text-white/60 transition hover:text-white"
-        >
-          ← Volver
-        </Link>
+      <div className="flex items-center gap-3 mb-4">
         <h1 className="text-2xl font-extrabold tracking-tight">Ranking</h1>
         <Link
           href={`/grupos/${id}/chat`}
@@ -48,6 +42,13 @@ export default function GrupoRankingPage() {
           💬 Chat
         </Link>
       </div>
+
+      <Link
+        href="/jugar"
+        className="mb-5 block w-full rounded-2xl bg-gradient-to-br from-violet to-violet-light px-6 py-3 text-center font-semibold text-white shadow-[0_6px_20px_rgba(124,92,255,0.4)] transition hover:brightness-110 active:scale-95"
+      >
+        🎮 Jugar el desafío de hoy
+      </Link>
 
       {loading ? (
         <Loading />

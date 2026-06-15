@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import Link from "next/link";
 import { ChatView } from "@/components/chat/ChatView";
 import {
   getMessages,
@@ -71,12 +70,6 @@ export default function GrupoChatPage() {
   return (
     <main className="flex flex-1 flex-col py-4">
       <div className="mb-3 flex items-center gap-3">
-        <Link
-          href={`/grupos/${id}`}
-          className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-1.5 text-sm text-white/60 transition hover:text-white"
-        >
-          ← Volver
-        </Link>
         <h1 className="text-2xl font-extrabold tracking-tight">Chat</h1>
       </div>
 
