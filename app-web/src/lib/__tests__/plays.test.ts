@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { savePlay, getMyPlay } from "@/lib/plays";
+import { savePlay, getMyPlay, getMyStreak } from "@/lib/plays";
 
 describe("plays", () => {
   it("getMyPlay devuelve el puntaje si existe", async () => {
@@ -33,5 +33,10 @@ describe("plays", () => {
       }),
     } as never;
     await expect(savePlay("u1", "2026-06-14", 100, 1, client)).resolves.toBeUndefined();
+  });
+
+  it("getMyStreak devuelve la racha desde la RPC", async () => {
+    const client = { rpc: vi.fn().mockResolvedValue({ data: 5, error: null }) } as never;
+    expect(await getMyStreak("u1", client)).toBe(5);
   });
 });

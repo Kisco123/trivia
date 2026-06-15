@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Mascot } from "@/components/Mascot";
 import { Card } from "@/components/ui/Card";
 import { PlayCTA } from "@/components/PlayCTA";
+import { PlayerStatus } from "@/components/PlayerStatus";
 import { CATEGORIES } from "@/lib/categories";
 
 export default function Home() {
@@ -15,6 +16,8 @@ export default function Home() {
           Una trivia al día. Compite con tu grupo.
         </p>
       </div>
+
+      <PlayerStatus />
 
       <Card className="w-full">
         <p className="mb-4 text-sm text-white/70">Categorías de hoy</p>
@@ -35,27 +38,17 @@ export default function Home() {
 
       <PlayCTA />
 
-      <div className="flex w-full flex-col gap-3">
-        <Link
-          href="/grupos"
-          className="flex flex-col items-center gap-1 rounded-2xl border border-white/20 bg-white/[0.06] py-4 transition hover:bg-white/[0.10] active:scale-95"
-        >
-          <span className="text-2xl">👥</span>
+      <Link
+        href="/grupos"
+        className="flex w-full items-center gap-3 rounded-2xl border border-white/15 bg-white/[0.06] px-5 py-4 text-left transition hover:bg-white/[0.10] active:scale-95"
+      >
+        <span className="text-2xl">👥</span>
+        <span className="flex flex-col">
           <span className="text-sm font-semibold">Grupos</span>
-        </Link>
-        <div className="grid grid-cols-2 gap-3">
-          <div className="flex flex-col items-center gap-1 rounded-2xl border border-white/10 bg-white/[0.03] py-4 opacity-60">
-            <span className="text-2xl">🏆</span>
-            <span className="text-sm font-semibold">Ranking</span>
-            <span className="text-[10px] uppercase tracking-wide text-white/40">Pronto</span>
-          </div>
-          <div className="flex flex-col items-center gap-1 rounded-2xl border border-white/10 bg-white/[0.03] py-4 opacity-60">
-            <span className="text-2xl">💬</span>
-            <span className="text-sm font-semibold">Chat</span>
-            <span className="text-[10px] uppercase tracking-wide text-white/40">Pronto</span>
-          </div>
-        </div>
-      </div>
+          <span className="text-[11px] text-white/50">Rankings y chat con tu grupo</span>
+        </span>
+        <span className="ml-auto text-lg text-white/30">›</span>
+      </Link>
     </main>
   );
 }

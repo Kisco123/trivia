@@ -33,3 +33,13 @@ export async function savePlay(
   });
   if (error && error.code !== "23505") throw new Error(`error guardando play: ${error.message}`);
 }
+
+/** Racha de días consecutivos jugados (vía RPC current_streak). */
+export async function getMyStreak(
+  userId: string,
+  client: SupabaseClient = getSupabaseClient(),
+): Promise<number> {
+  const { data, error } = await client.rpc("current_streak", { p_user: userId });
+  if (error) return 0;
+  return (data as number) ?? 0;
+}
