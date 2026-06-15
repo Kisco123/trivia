@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7c5cff"/>
+      <stop offset="1" stop-color="#b794ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="1080" height="1080" fill="url(#bg)"/>
+
+  <!-- copete (orejas del búho) -->
+  <path d="M395 305 L300 405 L470 440 Z" fill="#ffffff" opacity="0.92"/>
+  <path d="M685 305 L780 405 L610 440 Z" fill="#ffffff" opacity="0.92"/>
+
+  <!-- cabeza -->
+  <ellipse cx="540" cy="585" rx="290" ry="270" fill="#ffffff" opacity="0.10"/>
+
+  <!-- ojos -->
+  <circle cx="430" cy="545" r="155" fill="#ffffff"/>
+  <circle cx="650" cy="545" r="155" fill="#ffffff"/>
+  <circle cx="458" cy="565" r="66" fill="#1a0f3d"/>
+  <circle cx="622" cy="565" r="66" fill="#1a0f3d"/>
+  <circle cx="480" cy="543" r="22" fill="#ffffff"/>
+  <circle cx="644" cy="543" r="22" fill="#ffffff"/>
+
+  <!-- pico -->
+  <path d="M540 615 L585 685 L495 685 Z" fill="#ff8a4c"/>
+</svg>

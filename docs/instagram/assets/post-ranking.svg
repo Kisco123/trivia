@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080" font-family="Arial, Helvetica, sans-serif">
+  <defs>
+    <radialGradient id="g1" cx="15%" cy="8%" r="55%">
+      <stop offset="0" stop-color="#7c5cff" stop-opacity="0.30"/><stop offset="1" stop-color="#7c5cff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="v" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c5cff"/><stop offset="1" stop-color="#b794ff"/></linearGradient>
+  </defs>
+  <rect width="1080" height="1080" fill="#0a0e1a"/>
+  <rect width="1080" height="1080" fill="url(#g1)"/>
+
+  <text x="540" y="180" text-anchor="middle" fill="#ffffff" font-size="68" font-weight="800">¿Quién manda</text>
+  <text x="540" y="258" text-anchor="middle" fill="#ffffff" font-size="68" font-weight="800">en tu grupo? 🏆</text>
+
+  <!-- podium -->
+  <g>
+    <rect x="170" y="640" width="220" height="260" rx="20" fill="#ffffff" opacity="0.06"/>
+    <circle cx="280" cy="600" r="58" fill="#cbd5e1"/>
+    <text x="280" y="618" text-anchor="middle" fill="#0a0e1a" font-size="48" font-weight="800">2</text>
+    <text x="280" y="790" text-anchor="middle" fill="#fff" font-size="40" font-weight="700">Martín</text>
+
+    <rect x="430" y="560" width="220" height="340" rx="20" fill="url(#v)"/>
+    <circle cx="540" cy="500" r="66" fill="#ffd54a"/>
+    <text x="540" y="460" text-anchor="middle" font-size="60">👑</text>
+    <text x="540" y="520" text-anchor="middle" fill="#0a0e1a" font-size="52" font-weight="800">1</text>
+    <text x="540" y="720" text-anchor="middle" fill="#fff" font-size="44" font-weight="800">Sofía</text>
+
+    <rect x="690" y="700" width="220" height="200" rx="20" fill="#ffffff" opacity="0.06"/>
+    <circle cx="800" cy="660" r="54" fill="#d97706"/>
+    <text x="800" y="678" text-anchor="middle" fill="#0a0e1a" font-size="44" font-weight="800">3</text>
+    <text x="800" y="840" text-anchor="middle" fill="#fff" font-size="38" font-weight="700">Diego</text>
+  </g>
+
+  <text x="540" y="985" text-anchor="middle" fill="#b794ff" font-size="40" font-weight="700">Crea tu grupo · Link en bio 🦉</text>
+</svg>

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080" font-family="Arial, Helvetica, sans-serif">
+  <defs>
+    <radialGradient id="g1" cx="50%" cy="20%" r="60%">
+      <stop offset="0" stop-color="#ff6b35" stop-opacity="0.30"/><stop offset="1" stop-color="#ff6b35" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="fire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff6b35"/><stop offset="1" stop-color="#ff3d8b"/></linearGradient>
+  </defs>
+  <rect width="1080" height="1080" fill="#0a0e1a"/>
+  <rect width="1080" height="1080" fill="url(#g1)"/>
+
+  <text x="540" y="320" text-anchor="middle" font-size="200">🔥</text>
+
+  <text x="540" y="500" text-anchor="middle" fill="#ffffff" font-size="68" font-weight="800">¿Cuántos días</text>
+  <text x="540" y="585" text-anchor="middle" fill="#ffffff" font-size="68" font-weight="800">seguidos aguantas?</text>
+
+  <rect x="320" y="660" width="440" height="120" rx="60" fill="url(#fire)"/>
+  <text x="540" y="738" text-anchor="middle" fill="#ffffff" font-size="56" font-weight="800">RACHA: 7 DÍAS</text>
+
+  <text x="540" y="880" text-anchor="middle" fill="#94a3b8" font-size="40">Tu racha es tu orgullo. No la rompas.</text>
+  <text x="540" y="960" text-anchor="middle" fill="#b794ff" font-size="40" font-weight="700">Empieza hoy · Link en bio 🦉</text>
+</svg>

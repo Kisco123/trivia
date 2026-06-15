@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080" font-family="Arial, Helvetica, sans-serif">
+  <defs>
+    <radialGradient id="g1" cx="15%" cy="8%" r="55%">
+      <stop offset="0" stop-color="#7c5cff" stop-opacity="0.30"/><stop offset="1" stop-color="#7c5cff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="88%" cy="92%" r="55%">
+      <stop offset="0" stop-color="#22d3a4" stop-opacity="0.16"/><stop offset="1" stop-color="#22d3a4" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="v" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c5cff"/><stop offset="1" stop-color="#b794ff"/></linearGradient>
+  </defs>
+  <rect width="1080" height="1080" fill="#0a0e1a"/>
+  <rect width="1080" height="1080" fill="url(#g1)"/>
+  <rect width="1080" height="1080" fill="url(#g2)"/>
+
+  <text x="540" y="150" text-anchor="middle" fill="#94a3b8" font-size="34" font-weight="700" letter-spacing="3">CATEGORÍA · HISTORIA</text>
+  <text x="540" y="210" text-anchor="middle" fill="#b794ff" font-size="34" font-weight="700">¿Te la sabes? 🤔</text>
+
+  <!-- question card -->
+  <g transform="translate(90 270)">
+    <rect width="900" height="190" rx="36" fill="#ffffff" opacity="0.06"/>
+    <text x="450" y="90" text-anchor="middle" fill="#ffffff" font-size="48" font-weight="800">¿En qué año cayó</text>
+    <text x="450" y="150" text-anchor="middle" fill="#ffffff" font-size="48" font-weight="800">el muro de Berlín?</text>
+  </g>
+
+  <!-- options -->
+  <g transform="translate(90 510)" fill="#ffffff" font-size="44" font-weight="700">
+    <rect width="430" height="130" rx="26" fill="#ffffff" opacity="0.05"/>
+    <text x="215" y="82" text-anchor="middle">A) 1987</text>
+    <rect x="470" width="430" height="130" rx="26" fill="#ffffff" opacity="0.05"/>
+    <text x="685" y="82" text-anchor="middle">B) 1989</text>
+    <rect y="160" width="430" height="130" rx="26" fill="#ffffff" opacity="0.05"/>
+    <text x="215" y="242" text-anchor="middle">C) 1991</text>
+    <rect x="470" y="160" width="430" height="130" rx="26" fill="#ffffff" opacity="0.05"/>
+    <text x="685" y="242" text-anchor="middle">D) 1985</text>
+  </g>
+
+  <text x="540" y="930" text-anchor="middle" fill="#ffffff" font-size="40" font-weight="700">Comenta tu respuesta 👇</text>
+  <text x="540" y="1000" text-anchor="middle" fill="#b794ff" font-size="38" font-weight="700">Juega la trivia de hoy · Link en bio 🦉</text>
+</svg>

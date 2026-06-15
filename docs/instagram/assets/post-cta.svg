@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080" font-family="Arial, Helvetica, sans-serif">
+  <defs>
+    <radialGradient id="g1" cx="50%" cy="15%" r="60%">
+      <stop offset="0" stop-color="#7c5cff" stop-opacity="0.35"/><stop offset="1" stop-color="#7c5cff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="85%" cy="92%" r="55%">
+      <stop offset="0" stop-color="#ff8a4c" stop-opacity="0.20"/><stop offset="1" stop-color="#ff8a4c" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="owl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c5cff"/><stop offset="1" stop-color="#b794ff"/></linearGradient>
+  </defs>
+  <rect width="1080" height="1080" fill="#0a0e1a"/>
+  <rect width="1080" height="1080" fill="url(#g1)"/>
+  <rect width="1080" height="1080" fill="url(#g2)"/>
+
+  <!-- owl -->
+  <g transform="translate(540 330)">
+    <circle cx="-78" cy="0" r="88" fill="url(#owl)"/>
+    <circle cx="78" cy="0" r="88" fill="url(#owl)"/>
+    <circle cx="-78" cy="0" r="45" fill="#fff"/>
+    <circle cx="78" cy="0" r="45" fill="#fff"/>
+    <circle cx="-66" cy="7" r="19" fill="#1a0f3d"/>
+    <circle cx="90" cy="7" r="19" fill="#1a0f3d"/>
+    <path d="M0 58 L30 104 L-30 104 Z" fill="#ff8a4c"/>
+  </g>
+
+  <text x="540" y="560" text-anchor="middle" fill="#ffffff" font-size="80" font-weight="800">Gratis. Diario.</text>
+  <text x="540" y="655" text-anchor="middle" fill="#ffffff" font-size="80" font-weight="800">Con tu gente.</text>
+
+  <rect x="250" y="740" width="580" height="120" rx="60" fill="url(#owl)"/>
+  <text x="540" y="817" text-anchor="middle" fill="#ffffff" font-size="48" font-weight="800">JUEGA AHORA 👇</text>
+
+  <text x="540" y="960" text-anchor="middle" fill="#b794ff" font-size="44" font-weight="700">Link en la bio 🦉</text>
+</svg>
