@@ -1,5 +1,7 @@
 "use client";
+import { useEffect } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { Mascot } from "@/components/Mascot";
 import { Card } from "@/components/ui/Card";
 
@@ -8,12 +10,39 @@ export function ResultView({ total, breakdown }: {
   breakdown: { prompt: string; correct: boolean; points: number }[];
 }) {
   const aciertos = breakdown.filter((b) => b.correct).length;
+
+  // Confeti al ganar (solo si hay canvas 2D real; en tests/jsdom se omite).
+  useEffect(() => {
+    if (aciertos < 2) return;
+    const hasCanvas =
+      typeof document !== "undefined" &&
+      !!document.createElement("canvas").getContext?.("2d");
+    if (!hasCanvas) return;
+    void import("canvas-confetti")
+      .then((m) => {
+        try {
+          m.default({ particleCount: 120, spread: 90, origin: { y: 0.5 }, scalar: 1 });
+        } catch {
+          /* no-op */
+        }
+      })
+      .catch(() => {});
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-6 py-8 text-center">
       <Mascot expression={aciertos >= 2 ? "victory" : "neutral"} size={84} />
       <div>
         <div className="text-sm text-white/60">Tu puntaje de hoy</div>
-        <div className="text-5xl font-extrabold text-violet-light">{total}</div>
+        <motion.div
+          className="text-5xl font-extrabold text-violet-light"
+          initial={{ scale: 0.5, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 300, damping: 14 }}
+        >
+          {total}
+        </motion.div>
         {breakdown.length > 0 && (
           <div className="mt-1 text-sm text-white/60">{aciertos} de {breakdown.length} correctas</div>
         )}
