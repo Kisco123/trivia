@@ -5,7 +5,7 @@ import { QuestionView } from "@/components/game/QuestionView";
 import { ResultView } from "@/components/game/ResultView";
 import { IntroView } from "@/components/game/IntroView";
 import { useCountdown } from "@/hooks/useCountdown";
-import { submitAnswer, requestFiftyFifty } from "@/lib/gameplay";
+import { submitAnswer } from "@/lib/gameplay";
 import { computeScore, TIME_LIMIT_MS } from "@/lib/scoring";
 import { markPlayed, hasPlayed, getScore } from "@/lib/playedToday";
 import { ensureSession, getCurrentUserId } from "@/lib/auth";
@@ -27,8 +27,6 @@ type Phase = "intro" | "playing";
 export function GameClient({ date, questions, questionIds, client, revealMs = 1200 }: Props) {
   const [phase, setPhase] = useState<Phase>("intro");
   const [idx, setIdx] = useState(0);
-  const [hidden, setHidden] = useState<number[]>([]);
-  const [extraUsed, setExtraUsed] = useState(false);
   const [answeredIndex, setAnsweredIndex] = useState<number | null>(null);
   const [correctIndex, setCorrectIndex] = useState<number | null>(null);
   const [outcomes, setOutcomes] = useState<Outcome[]>([]);
@@ -66,7 +64,7 @@ export function GameClient({ date, questions, questionIds, client, revealMs = 12
   const q = questions[idx];
   const running =
     phase === "playing" && answeredIndex === null && !done && alreadyTotal === null;
-  const { secondsLeft, addSeconds } = useCountdown(TIME_LIMIT_MS / 1000, running, idx);
+  const { secondsLeft } = useCountdown(TIME_LIMIT_MS / 1000, running, idx);
 
   async function resolveAnswer(choice: number) {
     if (answeredIndex !== null) return;
@@ -87,8 +85,6 @@ export function GameClient({ date, questions, questionIds, client, revealMs = 12
         setDone(true);
       } else {
         setIdx(idx + 1);
-        setHidden([]);
-        setExtraUsed(false);
         setAnsweredIndex(null);
         setCorrectIndex(null);
         setStartedAt(Date.now());
@@ -120,17 +116,6 @@ export function GameClient({ date, questions, questionIds, client, revealMs = 12
     void resolveAnswer(choice);
   }
 
-  async function handleFiftyFifty() {
-    if (answeredIndex !== null || hidden.length > 0) return;
-    setHidden(await requestFiftyFifty(questionIds[idx], client));
-  }
-
-  function handleExtraTime() {
-    if (answeredIndex !== null || extraUsed) return;
-    setExtraUsed(true);
-    addSeconds(5);
-  }
-
   function startGame() {
     setStartedAt(Date.now());
     setPhase("playing");
@@ -153,12 +138,10 @@ export function GameClient({ date, questions, questionIds, client, revealMs = 12
     <QuestionView
       question={q}
       secondsLeft={secondsLeft}
-      hidden={hidden}
+      hidden={[]}
       answeredIndex={answeredIndex}
       correctIndex={correctIndex}
       onAnswer={handleAnswer}
-      onFiftyFifty={handleFiftyFifty}
-      onExtraTime={handleExtraTime}
     />
   );
 }
