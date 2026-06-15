@@ -4,8 +4,10 @@ import { Card } from "@/components/ui/Card";
 import { PlayCTA } from "@/components/PlayCTA";
 import { PlayerStatus } from "@/components/PlayerStatus";
 import { CATEGORIES } from "@/lib/categories";
+import { getFactOfDay } from "@/lib/funFacts";
 
 export default function Home() {
+  const fact = getFactOfDay();
   return (
     <main className="flex flex-1 flex-col items-center justify-center gap-8 py-10 text-center">
       <Mascot expression="happy" size={88} />
@@ -49,6 +51,13 @@ export default function Home() {
         </span>
         <span className="ml-auto text-lg text-white/30">›</span>
       </Link>
+
+      <div className="w-full rounded-2xl border border-orange/20 bg-gradient-to-br from-orange/[0.10] to-magenta/[0.06] p-4 text-left">
+        <div className="mb-1 flex items-center gap-2 text-[11px] font-bold uppercase tracking-wide text-orange">
+          💡 Dato curioso del día
+        </div>
+        <p className="text-sm text-white/80">{fact}</p>
+      </div>
     </main>
   );
 }
