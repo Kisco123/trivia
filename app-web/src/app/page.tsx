@@ -69,6 +69,14 @@ export default function Home() {
           💡 Dato curioso del día
         </div>
         <p className="text-sm text-white/80">{fact}</p>
+        <a
+          href={`https://www.google.com/search?q=${encodeURIComponent(fact)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-2 inline-block text-xs font-semibold text-orange hover:underline"
+        >
+          🔍 Saber más
+        </a>
       </div>
     </main>
   );
