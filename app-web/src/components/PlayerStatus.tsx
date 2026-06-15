@@ -2,10 +2,7 @@
 import { useEffect, useState } from "react";
 import { ensureSession, getCurrentUserId } from "@/lib/auth";
 import { getMyStreak, getMyPlay } from "@/lib/plays";
-
-function today(): string {
-  return new Date().toISOString().slice(0, 10);
-}
+import { todayString } from "@/lib/today";
 
 /** Muestra la racha del jugador y su estado de hoy en la portada. */
 export function PlayerStatus() {
@@ -19,7 +16,7 @@ export function PlayerStatus() {
         await ensureSession();
         const uid = await getCurrentUserId();
         if (!uid || cancelled) return;
-        const [s, play] = await Promise.all([getMyStreak(uid), getMyPlay(uid, today())]);
+        const [s, play] = await Promise.all([getMyStreak(uid), getMyPlay(uid, todayString())]);
         if (cancelled) return;
         setStreak(s);
         setTodayScore(play?.score ?? null);

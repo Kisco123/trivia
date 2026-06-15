@@ -1,14 +1,11 @@
 import { getDailySet } from "@/lib/dailySet";
 import { GameClient } from "@/components/game/GameClient";
+import { todayString } from "@/lib/today";
 
 export const dynamic = "force-dynamic";
 
-function today(): string {
-  return new Date().toISOString().slice(0, 10);
-}
-
 export default async function JugarPage() {
-  const date = today();
+  const date = todayString();
   let questions;
   try {
     questions = await getDailySet(date);
