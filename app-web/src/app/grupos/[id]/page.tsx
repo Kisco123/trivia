@@ -40,6 +40,12 @@ export default function GrupoRankingPage() {
           ← Volver
         </Link>
         <h1 className="text-2xl font-extrabold tracking-tight">Ranking</h1>
+        <Link
+          href={`/grupos/${id}/chat`}
+          className="ml-auto rounded-xl border border-white/10 bg-white/[0.04] px-3 py-1.5 text-sm text-white/70 transition hover:text-white"
+        >
+          💬 Chat
+        </Link>
       </div>
 
       {loading ? (
