@@ -34,6 +34,19 @@ export async function savePlay(
   if (error && error.code !== "23505") throw new Error(`error guardando play: ${error.message}`);
 }
 
+export async function getMyPlays(
+  userId: string,
+  client: SupabaseClient = getSupabaseClient(),
+): Promise<{ date: string; score: number }[]> {
+  const { data, error } = await client
+    .from("plays")
+    .select("date, score")
+    .eq("user_id", userId)
+    .order("date", { ascending: true });
+  if (error) throw new Error(`error leyendo partidas: ${error.message}`);
+  return (data ?? []) as { date: string; score: number }[];
+}
+
 /** Racha de días consecutivos jugados (vía RPC current_streak). */
 export async function getMyStreak(
   userId: string,
