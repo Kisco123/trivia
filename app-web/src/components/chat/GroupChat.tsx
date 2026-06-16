@@ -1,7 +1,5 @@
 "use client";
-
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
 import { ChatView } from "@/components/chat/ChatView";
 import {
   getMessages,
@@ -14,17 +12,15 @@ import {
 import { ensureSession, getCurrentUserId, getDisplayName } from "@/lib/auth";
 import { getSupabaseClient } from "@/lib/supabase";
 
-export default function GrupoChatPage() {
-  const params = useParams();
-  const id = params.id as string;
-
+/** Chat del grupo, listo para embeberse (ej. bajo el ranking). */
+export function GroupChat({ groupId }: { groupId: string }) {
   const [myUserId, setMyUserId] = useState("");
   const [displayName, setDisplayName] = useState("Jugador");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [reactionCounts, setReactionCounts] = useState<Record<string, Record<string, number>>>({});
 
   useEffect(() => {
-    if (!id) return;
+    if (!groupId) return;
     let channel: ReturnType<typeof subscribeMessages> | null = null;
 
     (async () => {
@@ -32,28 +28,28 @@ export default function GrupoChatPage() {
         await ensureSession();
         setMyUserId((await getCurrentUserId()) ?? "");
         setDisplayName((await getDisplayName()) ?? "Jugador");
-        const msgs = await getMessages(id);
+        const msgs = await getMessages(groupId);
         setMessages(msgs);
         setReactionCounts(await getReactionCounts(msgs.map((m) => m.id)));
-        channel = subscribeMessages(id, (m) =>
+        channel = subscribeMessages(groupId, (m) =>
           setMessages((prev) => (prev.some((x) => x.id === m.id) ? prev : [...prev, m])),
         );
       } catch {
-        // sin sesión (auth anónima deshabilitada): mostramos lo que haya
+        /* sin sesión: mostramos lo que haya */
       }
     })();
 
     return () => {
       if (channel) getSupabaseClient().removeChannel(channel);
     };
-  }, [id]);
+  }, [groupId]);
 
   async function onSend(body: string) {
     if (!myUserId) return;
     try {
-      await sendMessage(id, myUserId, displayName, body);
+      await sendMessage(groupId, myUserId, displayName, body);
     } catch {
-      // ignore: el envío falla si no hay sesión
+      /* ignore */
     }
   }
 
@@ -63,23 +59,17 @@ export default function GrupoChatPage() {
       await toggleReaction(messageId, myUserId, emoji);
       setReactionCounts(await getReactionCounts(messages.map((m) => m.id)));
     } catch {
-      // ignore
+      /* ignore */
     }
   }
 
   return (
-    <main className="flex flex-1 flex-col py-4">
-      <div className="mb-3 flex items-center gap-3">
-        <h1 className="text-2xl font-extrabold tracking-tight">Chat</h1>
-      </div>
-
-      <ChatView
-        messages={messages}
-        myUserId={myUserId}
-        reactionCounts={reactionCounts}
-        onSend={onSend}
-        onReact={onReact}
-      />
-    </main>
+    <ChatView
+      messages={messages}
+      myUserId={myUserId}
+      reactionCounts={reactionCounts}
+      onSend={onSend}
+      onReact={onReact}
+    />
   );
 }

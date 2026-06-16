@@ -7,6 +7,7 @@ import { getGroupRanking } from "@/lib/ranking";
 import type { RankRow, Period } from "@/lib/ranking";
 import { RankingView } from "@/components/ranking/RankingView";
 import { TrophyWall } from "@/components/ranking/TrophyWall";
+import { GroupChat } from "@/components/chat/GroupChat";
 import { Loading } from "@/components/ui/Loading";
 
 export default function GrupoRankingPage() {
@@ -34,15 +35,7 @@ export default function GrupoRankingPage() {
 
   return (
     <main className="flex flex-1 flex-col py-6">
-      <div className="flex items-center gap-3 mb-4">
-        <h1 className="text-2xl font-extrabold tracking-tight">Ranking</h1>
-        <Link
-          href={`/grupos/${id}/chat`}
-          className="ml-auto rounded-xl border border-white/10 bg-white/[0.04] px-3 py-1.5 text-sm text-white/70 transition hover:text-white"
-        >
-          💬 Chat
-        </Link>
-      </div>
+      <h1 className="mb-4 text-2xl font-extrabold tracking-tight">Ranking</h1>
 
       <Link
         href="/jugar"
@@ -61,6 +54,13 @@ export default function GrupoRankingPage() {
         <>
           <RankingView rows={rows} period={period} onPeriodChange={setPeriod} />
           <TrophyWall groupId={id} />
+
+          <div className="mt-8">
+            <h2 className="mb-3 text-lg font-extrabold">💬 Chat del grupo</h2>
+            <div className="flex h-[420px] flex-col rounded-2xl border border-white/10 bg-white/[0.02] p-3">
+              <GroupChat groupId={id} />
+            </div>
+          </div>
         </>
       )}
     </main>

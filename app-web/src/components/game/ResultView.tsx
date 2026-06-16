@@ -5,11 +5,13 @@ import { motion } from "framer-motion";
 import { Mascot } from "@/components/Mascot";
 import { Card } from "@/components/ui/Card";
 
-export function ResultView({ total, breakdown }: {
+export function ResultView({ total, breakdown, groupHref = "/grupos" }: {
   total: number;
   breakdown: { prompt: string; correct: boolean; points: number }[];
+  groupHref?: string;
 }) {
   const aciertos = breakdown.filter((b) => b.correct).length;
+  const hasGroup = groupHref.startsWith("/grupos/");
 
   // Confeti al ganar (solo si hay canvas 2D real; en tests/jsdom se omite).
   useEffect(() => {
@@ -59,12 +61,18 @@ export function ResultView({ total, breakdown }: {
           ))}
         </Card>
       )}
-      <p className="text-sm text-white/50">Vuelve mañana para el próximo desafío 🦉</p>
+      <div className="w-full rounded-2xl border border-orange/25 bg-gradient-to-br from-orange/[0.12] to-magenta/[0.07] px-4 py-3 text-center text-sm font-semibold text-orange">
+        🦉 Vuelve mañana para el próximo desafío
+      </div>
 
       <Link
-        href="/"
+        href={groupHref}
         className="w-full cursor-pointer rounded-2xl bg-gradient-to-br from-violet to-violet-light px-6 py-3 text-center font-semibold text-white shadow-[0_6px_20px_rgba(124,92,255,0.4)] transition hover:brightness-110 active:scale-95"
       >
+        {hasGroup ? "🏆 Ver ranking y chat" : "👥 Crea tu grupo para competir"}
+      </Link>
+
+      <Link href="/" className="text-sm text-white/50 transition hover:text-white/80">
         Volver al inicio
       </Link>
     </div>

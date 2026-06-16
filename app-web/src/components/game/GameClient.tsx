@@ -11,6 +11,7 @@ import { computeScore, TIME_LIMIT_MS } from "@/lib/scoring";
 import { markPlayed, hasPlayed, getScore } from "@/lib/playedToday";
 import { ensureSession, getCurrentUserId } from "@/lib/auth";
 import { savePlay, getMyPlay } from "@/lib/plays";
+import { getMyGroups } from "@/lib/groups";
 import type { DailyQuestion } from "@/lib/dailySet";
 import type { Difficulty } from "@/lib/questions";
 
@@ -35,6 +36,7 @@ export function GameClient({ date, questions, questionIds, client, revealMs = 12
   const [done, setDone] = useState(false);
   const [alreadyTotal, setAlreadyTotal] = useState<number | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
+  const [groupHref, setGroupHref] = useState("/grupos");
 
   useEffect(() => {
     let cancelled = false;
@@ -44,6 +46,12 @@ export function GameClient({ date, questions, questionIds, client, revealMs = 12
         const uid = await getCurrentUserId(client);
         if (cancelled) return;
         setUserId(uid);
+        try {
+          const groups = await getMyGroups(client);
+          if (!cancelled && groups.length > 0) setGroupHref(`/grupos/${groups[0].id}`);
+        } catch {
+          /* sin grupos */
+        }
         if (uid) {
           const play = await getMyPlay(uid, date, client);
           if (!cancelled && play) {
@@ -123,12 +131,12 @@ export function GameClient({ date, questions, questionIds, client, revealMs = 12
   }
 
   if (alreadyTotal !== null) {
-    return <ResultView total={alreadyTotal} breakdown={[]} />;
+    return <ResultView total={alreadyTotal} breakdown={[]} groupHref={groupHref} />;
   }
 
   if (done) {
     const total = outcomes.reduce((s, o) => s + o.points, 0);
-    return <ResultView total={total} breakdown={outcomes} />;
+    return <ResultView total={total} breakdown={outcomes} groupHref={groupHref} />;
   }
 
   if (phase === "intro") {
