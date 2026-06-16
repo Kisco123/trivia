@@ -50,7 +50,8 @@ export default function CuentaPage() {
 
   async function handleSignOut() {
     await signOutAccount();
-    router.push("/");
+    // Recarga completa: re-evalúa el muro de cuenta y muestra la bienvenida.
+    window.location.href = "/";
   }
 
   if (loading) {
