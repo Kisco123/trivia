@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ChatMessage } from "@/lib/chat";
 
 const EMOJIS = ["👍", "❤️", "😂", "🔥"];
@@ -14,6 +14,13 @@ type Props = {
 
 export function ChatView({ messages, myUserId, reactionCounts, onSend, onReact }: Props) {
   const [text, setText] = useState("");
+  const listRef = useRef<HTMLDivElement>(null);
+
+  // Mantén la conversación pegada al último mensaje cuando llegan nuevos.
+  useEffect(() => {
+    const el = listRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [messages.length]);
 
   function send() {
     const body = text.trim();
@@ -23,8 +30,11 @@ export function ChatView({ messages, myUserId, reactionCounts, onSend, onReact }
   }
 
   return (
-    <div className="flex flex-1 flex-col gap-3">
-      <div className="flex flex-1 flex-col gap-3 overflow-y-auto pb-2">
+    <div className="flex min-h-0 flex-1 flex-col">
+      <div
+        ref={listRef}
+        className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto pr-1"
+      >
         {messages.length === 0 && (
           <p className="mt-8 text-center text-sm text-white/40">
             Aún no hay mensajes. ¡Saluda a tu grupo! 🦉
@@ -66,7 +76,7 @@ export function ChatView({ messages, myUserId, reactionCounts, onSend, onReact }
         })}
       </div>
 
-      <div className="flex items-center gap-2 pt-1">
+      <div className="mt-3 flex items-center gap-2 border-t border-white/10 pt-3">
         <input
           value={text}
           onChange={(e) => setText(e.target.value)}
