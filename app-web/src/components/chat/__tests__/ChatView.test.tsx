@@ -20,10 +20,29 @@ describe("ChatView", () => {
     fireEvent.click(screen.getByRole("button", { name: /enviar/i }));
     expect(onSend).toHaveBeenCalledWith("hola");
   });
-  it("reacciona a un mensaje", () => {
+  it("al mantener presionado (o clic derecho) abre el selector y reacciona", () => {
     const onReact = vi.fn();
     render(<ChatView messages={messages} myUserId="me" reactionCounts={{}} onSend={() => {}} onReact={onReact} />);
-    fireEvent.click(screen.getAllByRole("button", { name: "🔥" })[0]);
+    // Sin interacción no hay botones de emoji visibles (interfaz limpia).
+    expect(screen.queryByRole("button", { name: "🔥" })).not.toBeInTheDocument();
+    // Mantener presionado se simula con el menú contextual.
+    fireEvent.contextMenu(screen.getByText("¡Gané hoy!"));
+    fireEvent.click(screen.getByRole("button", { name: "🔥" }));
     expect(onReact).toHaveBeenCalledWith("m1", "🔥");
+  });
+
+  it("muestra solo las reacciones que ya tiene un mensaje", () => {
+    render(
+      <ChatView
+        messages={messages}
+        myUserId="me"
+        reactionCounts={{ m1: { "❤️": 2 } }}
+        onSend={() => {}}
+        onReact={() => {}}
+      />,
+    );
+    expect(screen.getByRole("button", { name: "❤️ 2" })).toBeInTheDocument();
+    // El resto de emojis no aparece hasta abrir el selector.
+    expect(screen.queryByRole("button", { name: "🔥" })).not.toBeInTheDocument();
   });
 });

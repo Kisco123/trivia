@@ -14,13 +14,29 @@ type Props = {
 
 export function ChatView({ messages, myUserId, reactionCounts, onSend, onReact }: Props) {
   const [text, setText] = useState("");
+  const [pickerFor, setPickerFor] = useState<string | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
+  const pressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Mantén la conversación pegada al último mensaje cuando llegan nuevos.
   useEffect(() => {
     const el = listRef.current;
     if (el) el.scrollTop = el.scrollHeight;
   }, [messages.length]);
+
+  // Limpia el temporizador de "mantener presionado" al desmontar.
+  useEffect(() => () => clearPress(), []);
+
+  function startPress(id: string) {
+    clearPress();
+    pressTimer.current = setTimeout(() => setPickerFor(id), 450);
+  }
+  function clearPress() {
+    if (pressTimer.current) {
+      clearTimeout(pressTimer.current);
+      pressTimer.current = null;
+    }
+  }
 
   function send() {
     const body = text.trim();
@@ -40,41 +56,77 @@ export function ChatView({ messages, myUserId, reactionCounts, onSend, onReact }
             Aún no hay mensajes. ¡Saluda a tu grupo! 🦉
           </p>
         )}
-        {messages.map((m) => {
+        {messages.map((m, i) => {
           const mine = m.user_id === myUserId;
           const counts = reactionCounts[m.id] ?? {};
+          const active = Object.entries(counts).filter(([, n]) => n > 0);
+          const placeBelow = i === 0; // evita que el selector se corte arriba del todo
           return (
             <div key={m.id} className={`flex flex-col ${mine ? "items-end" : "items-start"}`}>
               {!mine && <span className="mb-1 ml-1 text-[11px] text-white/50">{m.display_name}</span>}
-              <div
-                className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm ${
-                  mine
-                    ? "bg-gradient-to-br from-violet to-violet-light text-white"
-                    : "bg-white/10 text-white"
-                }`}
-              >
-                {m.body}
+              <div className="relative max-w-[80%]">
+                {pickerFor === m.id && (
+                  <div
+                    className={`absolute z-50 flex gap-0.5 rounded-full border border-white/10 bg-bg-elevated p-1 shadow-xl ${
+                      placeBelow ? "top-full mt-1" : "bottom-full mb-1"
+                    } ${mine ? "right-0" : "left-0"}`}
+                  >
+                    {EMOJIS.map((e) => (
+                      <button
+                        key={e}
+                        aria-label={e}
+                        onClick={() => {
+                          onReact(m.id, e);
+                          setPickerFor(null);
+                        }}
+                        className="cursor-pointer rounded-full px-1.5 py-0.5 text-lg transition hover:scale-125"
+                      >
+                        {e}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                <div
+                  onPointerDown={() => startPress(m.id)}
+                  onPointerUp={clearPress}
+                  onPointerLeave={clearPress}
+                  onPointerCancel={clearPress}
+                  onContextMenu={(ev) => {
+                    ev.preventDefault();
+                    setPickerFor(m.id);
+                  }}
+                  className={`cursor-pointer select-none rounded-2xl px-4 py-2 text-sm [-webkit-touch-callout:none] ${
+                    mine
+                      ? "bg-gradient-to-br from-violet to-violet-light text-white"
+                      : "bg-white/10 text-white"
+                  }`}
+                >
+                  {m.body}
+                </div>
               </div>
-              <div className="mt-1 flex gap-1">
-                {EMOJIS.map((e) => {
-                  const n = counts[e] ?? 0;
-                  return (
+              {active.length > 0 && (
+                <div className="mt-1 flex flex-wrap gap-1">
+                  {active.map(([e, n]) => (
                     <button
                       key={e}
-                      aria-label={e}
+                      aria-label={`${e} ${n}`}
                       onClick={() => onReact(m.id, e)}
-                      className="flex cursor-pointer items-center gap-0.5 rounded-full border border-white/10 bg-white/[0.04] px-1.5 py-0.5 text-xs transition hover:bg-white/10"
+                      className="flex cursor-pointer items-center gap-0.5 rounded-full border border-white/10 bg-white/[0.06] px-1.5 py-0.5 text-xs transition hover:bg-white/10"
                     >
                       <span>{e}</span>
-                      {n > 0 && <span className="text-[10px] text-white/60">{n}</span>}
+                      <span className="text-[10px] text-white/70">{n}</span>
                     </button>
-                  );
-                })}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           );
         })}
       </div>
+
+      {pickerFor && (
+        <div className="fixed inset-0 z-40" onPointerDown={() => setPickerFor(null)} />
+      )}
 
       <div className="mt-3 flex items-center gap-2 border-t border-white/10 pt-3">
         <input
